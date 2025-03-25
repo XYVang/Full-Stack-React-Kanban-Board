@@ -6,18 +6,13 @@ export const login = async (req, res) => {
     try {
         const { username, password } = req.body;
         if (!username || !password) {
-            return res.status(400).json({ message: 'Username and password are required' });
+            return res.status(400).json({ message: 'Credentials not found' });
         }
         // Find the user by username
         const user = await User.findOne({ where: { username } });
-        // If user doesn't exist return error msg
-        if (!user) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
-        // Check valid password
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Invalid credentials' });
+        // If user doesn't exist or password is invalid, return the same generic message
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(401).json({ message: 'Credentials not found' });
         }
         // JWT token
         const token = jwt.sign({ username: user.username }, process.env.JWT_SECRET, { expiresIn: '24h' });
