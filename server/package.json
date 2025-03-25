@@ -33,7 +33,8 @@
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.11.5",
     "sequelize": "^6.37.3",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "ts-node": "^10.9.2"
