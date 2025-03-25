@@ -6,9 +6,9 @@
   "type": "module",
   "scripts": {
     "build": "npx tsc",
-    "start": "npx ts-node server/src/seeds/index.ts && node dist/server.js",
+    "start": "npx ts-node src/seeds/index.ts && node dist/server.js",
     "dev": "npx nodemon",
-    "seed": "ts-node server/src/seeds/index.ts",  
+    "seed": "ts-node src/seeds/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "npm rebuild bcrypt --build-from-source && npm run seed"
   },
@@ -33,7 +33,7 @@
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.11.5",
     "sequelize": "^6.37.3",
-    "typescript": "^5.4.5",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
   }
 }
