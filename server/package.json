@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "npx tsc",
-    "start": "npx ts-node src/seeds/index.ts && node dist/server.js",
+    "start": "node dist/src/seeds/index.js && node dist/server.js",
     "dev": "npx nodemon",
     "seed": "ts-node src/seeds/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
