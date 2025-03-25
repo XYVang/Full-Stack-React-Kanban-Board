@@ -5,19 +5,26 @@ import { Sequelize } from 'sequelize';
 import { UserFactory } from './user.js';
 import { TicketFactory } from './ticket.js';
 
-// If DB_URL exists, use it; otherwise, use individual environment variables
+const dbPort = process.env.DB_PORT ? parseInt(process.env.DB_PORT, 10) : 5432;
+
+const dbHost = process.env.DB_HOST || 'localhost';
+
+console.log('DB_HOST:', dbHost); 
+console.log('DB_PORT:', process.env.DB_PORT); 
+console.log('Parsed DB_PORT:', dbPort); 
+
 const sequelize = process.env.DB_URL
-  ? new Sequelize(process.env.DB_URL)  // If the full URL is provided
+  ? new Sequelize(process.env.DB_URL) 
   : new Sequelize(process.env.DB_NAME || '', process.env.DB_USER || '', process.env.DB_PASSWORD, {
-      host: process.env.DB_HOST,  // Use the DB_HOST environment variable
-      port: process.env.DB_PORT || 5432,  // Default port if not set (PostgreSQL default is 5432)
+      host: dbHost, 
+      port: dbPort, 
       dialect: 'postgres',
       dialectOptions: {
         decimalNumbers: true,
       },
     });
 
-// Define models and relationships
+// Models and relationships
 const User = UserFactory(sequelize);
 const Ticket = TicketFactory(sequelize);
 
