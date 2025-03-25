@@ -4,12 +4,15 @@ import { sequelize } from '../models/index.js';
 
 const seedAll = async (): Promise<void> => {
   try {
+    console.log("Starting database sync...");
     await sequelize.sync({ force: true });
     console.log('\n----- DATABASE SYNCED -----\n');
     
+    console.log("Seeding users...");
     await seedUsers();
     console.log('\n----- USERS SEEDED -----\n');
     
+    console.log("Seeding tickets...");
     await seedTickets();
     console.log('\n----- TICKETS SEEDED -----\n');
     
