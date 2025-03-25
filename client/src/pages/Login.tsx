@@ -7,7 +7,7 @@ const Login = () => {
     username: '',
     password: ''
   });
-  const [error, setError] = useState<string | null>(null); // State to store error messages
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -19,14 +19,15 @@ const Login = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setError(null); // Reset error message on new submission
+    // Reset error message on new submission
+    setError(null); 
 
     try {
       const data = await login(loginData);
       Auth.login(data.token);
     } catch (err: any) {
       console.error('Failed to login', err);
-      setError(err.response?.data?.message || 'Invalid username or password'); // Set error message
+      setError(err.response?.data?.message || 'Invalid username or password');
     }
   };
 
