@@ -2,6 +2,8 @@ import { UserLogin } from "../interfaces/UserLogin";
 
 const login = async (userInfo: UserLogin) => {
   try {
+    console.log('Attempting login with:', userInfo);
+
     const response = await fetch('/auth/login', {
       method: 'POST',
       headers: {
@@ -10,14 +12,21 @@ const login = async (userInfo: UserLogin) => {
       body: JSON.stringify(userInfo),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Login failed');
+    console.log('Response status:', response.status);
+    
+    // Log raw response text before parsing
+    const responseText = await response.text();
+    console.log('Raw response:', responseText);
+
+    const data = JSON.parse(responseText);
+    
+    if (!data.success) {
+      throw new Error(data.message || 'Login failed');
     }
 
-    return await response.json();
+    return data;
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('Detailed login error:', error);
     throw error;
   }
 };

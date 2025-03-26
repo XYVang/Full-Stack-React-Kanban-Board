@@ -5,18 +5,28 @@ import bcrypt from 'bcryptjs';
 
 export const login = async (req: Request, res: Response) => {
   try {
+    console.log('Login attempt received:', req.body); // Add logging for incoming request
+
     const { username, password } = req.body;
 
     if (!username || !password) {
-      return res.status(400).json({ message: 'Credentials not found' });
+      console.log('Missing credentials');
+      return res.status(400).json({ 
+        success: false,
+        message: 'Credentials not found' 
+      });
     }
 
     // Find the user by username
     const user = await User.findOne({ where: { username } });
 
-    // If user doesn't exist or password is invalid, return the same generic message
+    // If user doesn't exist or password is invalid
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ message: 'Credentials not found' });
+      console.log('Invalid credentials for user:', username);
+      return res.status(401).json({ 
+        success: false,
+        message: 'Invalid credentials' 
+      });
     }
 
     // JWT token
@@ -26,8 +36,10 @@ export const login = async (req: Request, res: Response) => {
       { expiresIn: '24h' }
     );
 
-    // Return token
+    // Ensure a complete JSON response
+    console.log('Login successful for user:', username);
     return res.status(200).json({
+      success: true,
       token,
       user: {
         id: user.id,
@@ -35,8 +47,12 @@ export const login = async (req: Request, res: Response) => {
       }
     });
   } catch (error) {
-    console.error('Login error:', error);
-    return res.status(500).json({ message: 'Internal server error' });
+    console.error('Detailed login error:', error);
+    return res.status(500).json({ 
+      success: false,
+      message: 'Internal server error',
+      error: error instanceof Error ? error.message : 'Unknown error'
+    });
   }
 };
 
