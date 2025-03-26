@@ -2,10 +2,12 @@ import { TicketData } from '../interfaces/TicketData';
 import { ApiMessage } from '../interfaces/ApiMessage';
 import Auth from '../utils/auth';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+
 const retrieveTickets = async () => {
   try {
     const response = await fetch(
-      '/api/tickets/',
+      `${API_URL}/api/tickets/`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -15,8 +17,8 @@ const retrieveTickets = async () => {
     );
     const data = await response.json();
 
-    if(!response.ok) {
-      throw new Error('invalid API response, check network tab!');
+    if (!response.ok) {
+      throw new Error('Invalid API response, check network tab!');
     }
 
     return data;
@@ -29,7 +31,7 @@ const retrieveTickets = async () => {
 const retrieveTicket = async (id: number | null): Promise<TicketData> => {
   try {
     const response = await fetch(
-      `/api/tickets/${id}`,
+      `${API_URL}/api/tickets/${id}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -40,47 +42,45 @@ const retrieveTicket = async (id: number | null): Promise<TicketData> => {
 
     const data = await response.json();
 
-    if(!response.ok) {
-      throw new Error('Could not invalid API response, check network tab!');
+    if (!response.ok) {
+      throw new Error('Invalid API response, check network tab!');
     }
     return data;
   } catch (err) {
     console.log('Error from data retrieval: ', err);
     return Promise.reject('Could not fetch singular ticket');
   }
-}
+};
 
 const createTicket = async (body: TicketData) => {
   try {
     const response = await fetch(
-      '/api/tickets/', {
+      `${API_URL}/api/tickets/`, {
         method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${Auth.getToken()}`
-          },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${Auth.getToken()}`
+        },
         body: JSON.stringify(body)
       }
+    );
+    const data = await response.json();
 
-    )
-    const data = response.json();
-
-    if(!response.ok) {
-      throw new Error('invalid API response, check network tab!');
+    if (!response.ok) {
+      throw new Error('Invalid API response, check network tab!');
     }
 
     return data;
-
   } catch (err) {
     console.log('Error from Ticket Creation: ', err);
     return Promise.reject('Could not create ticket');
   }
-}
+};
 
 const updateTicket = async (ticketId: number, body: TicketData): Promise<TicketData> => {
   try {
     const response = await fetch(
-      `/api/tickets/${ticketId}`, {
+      `${API_URL}/api/tickets/${ticketId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -88,11 +88,11 @@ const updateTicket = async (ticketId: number, body: TicketData): Promise<TicketD
         },
         body: JSON.stringify(body)
       }
-    )
+    );
     const data = await response.json();
 
-    if(!response.ok) {
-      throw new Error('invalid API response, check network tab!');
+    if (!response.ok) {
+      throw new Error('Invalid API response, check network tab!');
     }
 
     return data;
@@ -105,18 +105,18 @@ const updateTicket = async (ticketId: number, body: TicketData): Promise<TicketD
 const deleteTicket = async (ticketId: number): Promise<ApiMessage> => {
   try {
     const response = await fetch(
-      `/api/tickets/${ticketId}`, {
+      `${API_URL}/api/tickets/${ticketId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${Auth.getToken()}`
         }
       }
-    )
+    );
     const data = await response.json();
 
-    if(!response.ok) {
-      throw new Error('invalid API response, check network tab!');
+    if (!response.ok) {
+      throw new Error('Invalid API response, check network tab!');
     }
 
     return data;
@@ -126,5 +126,4 @@ const deleteTicket = async (ticketId: number): Promise<ApiMessage> => {
   }
 };
 
-
-export { createTicket, deleteTicket, retrieveTickets, retrieveTicket, updateTicket};
+export { createTicket, deleteTicket, retrieveTickets, retrieveTicket, updateTicket };
