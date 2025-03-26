@@ -5,12 +5,13 @@ import bcrypt from 'bcryptjs';
 
 export const login = async (req: Request, res: Response) => {
   try {
-    console.log('Login attempt received:', req.body); // Add logging for incoming request
+    console.log('Received login request:', JSON.stringify(req.body, null, 2));
+    console.log('Request headers:', JSON.stringify(req.headers, null, 2));
 
     const { username, password } = req.body;
 
     if (!username || !password) {
-      console.log('Missing credentials');
+      console.error('Missing credentials');
       return res.status(400).json({ 
         success: false,
         message: 'Credentials not found' 
@@ -18,11 +19,27 @@ export const login = async (req: Request, res: Response) => {
     }
 
     // Find the user by username
-    const user = await User.findOne({ where: { username } });
+    const user = await User.findOne({ 
+      where: { username },
+      raw: true 
+    });
 
-    // If user doesn't exist or password is invalid
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      console.log('Invalid credentials for user:', username);
+    console.log('User found:', user ? 'Yes' : 'No');
+
+    if (!user) {
+      console.error('No user found with username:', username);
+      return res.status(401).json({ 
+        success: false,
+        message: 'Invalid credentials' 
+      });
+    }
+
+    // Compare passwords
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log('Password validation:', isPasswordValid);
+
+    if (!isPasswordValid) {
+      console.error('Invalid password for user:', username);
       return res.status(401).json({ 
         success: false,
         message: 'Invalid credentials' 
@@ -36,9 +53,8 @@ export const login = async (req: Request, res: Response) => {
       { expiresIn: '24h' }
     );
 
-    // Ensure a complete JSON response
-    console.log('Login successful for user:', username);
-    return res.status(200).json({
+    console.log('Login successful, sending response');
+    res.status(200).json({
       success: true,
       token,
       user: {
@@ -48,7 +64,7 @@ export const login = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Detailed login error:', error);
-    return res.status(500).json({ 
+    res.status(500).json({ 
       success: false,
       message: 'Internal server error',
       error: error instanceof Error ? error.message : 'Unknown error'
