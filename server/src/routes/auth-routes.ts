@@ -64,16 +64,19 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
         username: user.username
       }
     });
+
   } catch (error) {
     console.error('===== LOGIN ERROR =====');
     console.error('Detailed error:', error);
-    
+
     return res.status(500).json({ 
       success: false,
       message: 'Internal server error',
       error: error instanceof Error ? error.message : 'Unknown error'
     });
   }
+
+  return res.status(500).json({ success: false, message: "Unknown error occurred" });
 };
 
 const router = Router();

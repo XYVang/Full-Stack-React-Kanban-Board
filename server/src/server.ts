@@ -40,13 +40,9 @@ app.use(express.static('../client/dist'));
 app.use(routes);
 
 // Error handling middleware with all parameters used
-app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  console.error('Unhandled Error:', err);
-  res.status(500).json({
-    success: false,
-    message: 'Unexpected server error',
-    error: err.message
-  });
+app.use((err: Error, req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  console.error(`Unhandled Error on ${req.method} ${req.url}:`, err);
+  res.status(500).json({ success: false, message: 'Unexpected server error', error: err.message });
 });
 
 sequelize.sync({force: forceDatabaseRefresh}).then(() => {
