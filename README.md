@@ -19,13 +19,13 @@ Users are able to log in with correct credentials to the Kanban board. They will
 Here are some images that provide the products usability.
 
 Home Page
-![Home page](Assets\homepage.png)
+![Home page](Assets/homepage.png)
 
 Login Page
-![Home page](Assets\loginpageimg.png)
+![Home page](Assets/loginpageimg.png)
 
 Kanban Board Page
-![Home page](Assets\KanbanBoardimg.png)
+![Home page](Assets/KanbanBoardimg.png)
 ## License
 
 MIT License
