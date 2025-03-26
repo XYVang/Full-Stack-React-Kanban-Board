@@ -5,16 +5,18 @@ import bcrypt from 'bcryptjs';
 
 export const login = async (req: Request, res: Response): Promise<Response> => {
   try {
-    console.log('Received login request:', JSON.stringify(req.body, null, 2));
-    console.log('Request headers:', JSON.stringify(req.headers, null, 2));
+    console.log('===== LOGIN REQUEST =====');
+    console.log('Request Body:', JSON.stringify(req.body, null, 2));
+    console.log('Request Headers:', JSON.stringify(req.headers, null, 2));
 
     const { username, password } = req.body;
 
+    // Validate input
     if (!username || !password) {
       console.error('Missing credentials');
       return res.status(400).json({ 
         success: false,
-        message: 'Credentials not found' 
+        message: 'Username and password are required' 
       });
     }
 
@@ -24,36 +26,36 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
       raw: true 
     });
 
-    console.log('User found:', user ? 'Yes' : 'No');
+    console.log('User lookup result:', user ? 'User found' : 'No user found');
 
     if (!user) {
       console.error('No user found with username:', username);
       return res.status(401).json({ 
         success: false,
-        message: 'Invalid credentials' 
+        message: 'Invalid username or password' 
       });
     }
 
-    // Compare passwords
+    // Password validation
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    console.log('Password validation:', isPasswordValid);
+    console.log('Password validation:', isPasswordValid ? 'Successful' : 'Failed');
 
     if (!isPasswordValid) {
       console.error('Invalid password for user:', username);
       return res.status(401).json({ 
         success: false,
-        message: 'Invalid credentials' 
+        message: 'Invalid username or password' 
       });
     }
 
-    // JWT token
+    // Generate JWT token
     const token = jwt.sign(
       { username: user.username },
       process.env.JWT_SECRET as string,
       { expiresIn: '24h' }
     );
 
-    console.log('Login successful, sending response');
+    console.log('===== LOGIN SUCCESSFUL =====');
     return res.status(200).json({
       success: true,
       token,
@@ -63,7 +65,9 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
       }
     });
   } catch (error) {
-    console.error('Detailed login error:', error);
+    console.error('===== LOGIN ERROR =====');
+    console.error('Detailed error:', error);
+    
     return res.status(500).json({ 
       success: false,
       message: 'Internal server error',
@@ -74,7 +78,7 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
 
 const router = Router();
 
-// Login a user
+// Login route
 router.post('/login', login);
 
 export default router;
