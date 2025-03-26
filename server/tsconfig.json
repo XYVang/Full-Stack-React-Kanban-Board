@@ -1,16 +1,29 @@
 {
-    "extends": "../tsconfig.json",
-    "compilerOptions": {
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
       /* Modules */
       "rootDir": "src" /* Specify the root folder within your source files. */,
-  
+
       /* Emit */
-      "outDir": "dist", /* Specify an output folder for all emitted files. */
-      // "noEmitOnError": true /* Disable emitting files if any type checking errors are reported. */
+      "outDir": "dist" /* Specify an output folder for all emitted files. */,
       "moduleResolution": "node",
       "esModuleInterop": true,
-      "resolveJsonModule": true
-    },
-    "include": ["src"],
-    "typeRoots": ["./node_modules/@types", "./src/types"]
+      "resolveJsonModule": true,
+
+      /* Strict Checks */
+      "strict": true,
+      "noUnusedLocals": false,
+      "noUnusedParameters": false,
+      "noImplicitAny": true,
+      "strictNullChecks": true,
+
+      /* Additional Options */
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "target": "es2020",
+      "module": "ESNext"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"],
+  "typeRoots": ["./node_modules/@types", "./src/types"]
 }
