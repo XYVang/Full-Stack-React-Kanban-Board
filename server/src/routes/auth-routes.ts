@@ -3,7 +3,7 @@ import { User } from '../models/user.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
-export const login = async (req: Request, res: Response) => {
+export const login = async (req: Request, res: Response): Promise<Response> => {
   try {
     console.log('Received login request:', JSON.stringify(req.body, null, 2));
     console.log('Request headers:', JSON.stringify(req.headers, null, 2));
@@ -54,7 +54,7 @@ export const login = async (req: Request, res: Response) => {
     );
 
     console.log('Login successful, sending response');
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       token,
       user: {
@@ -64,7 +64,7 @@ export const login = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Detailed login error:', error);
-    res.status(500).json({ 
+    return res.status(500).json({ 
       success: false,
       message: 'Internal server error',
       error: error instanceof Error ? error.message : 'Unknown error'
