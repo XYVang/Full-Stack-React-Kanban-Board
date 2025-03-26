@@ -19,7 +19,7 @@ app.use(cors({
     'https://full-stack-react-kanban-board-frontend.onrender.com'
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Debug-Request'],
   credentials: true 
 }));
 
