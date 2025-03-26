@@ -2,7 +2,7 @@ import { TicketData } from '../interfaces/TicketData';
 import { ApiMessage } from '../interfaces/ApiMessage';
 import Auth from '../utils/auth';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+const API_URL = 'https://full-stack-react-kanban-board-lsk2.onrender.com';
 
 const retrieveTickets = async () => {
   try {
